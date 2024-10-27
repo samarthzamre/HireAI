@@ -1,15 +1,37 @@
 import Footer from './src/components/Footer';
 import Navbar from './src/components/Navbar';
-import { Outlet, useLocation } from 'react-router-dom';
+import { Outlet, useLocation, Navigate } from 'react-router-dom';
 import ScrollToTop from './src/components/ScrollTop';
-import { SignedIn, UserButton, useUser } from '@clerk/clerk-react';
+import { SignedIn, UserButton, useUser, useClerk } from '@clerk/clerk-react';
+import { useEffect } from 'react';
 
 const Layout = () => {
   const location = useLocation();
   const { user } = useUser(); // Get user information from Clerk
+  const clerk = useClerk(); // Access Clerk methods
 
   // Check if the current path is the dashboard path
   const isDashboard = location.pathname === '/dashboard';
+
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Sign out the user when the browser window is closed
+      clerk.signOut();
+    };
+
+    // Add event listener to window beforeunload
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [clerk]);
+
+  // Redirect to the dashboard if the user is authenticated and not on the dashboard
+  if (user && !isDashboard) {
+    return <Navigate to="/dashboard" replace />;
+  }
 
   return (
     <div>
@@ -19,7 +41,7 @@ const Layout = () => {
       {!isDashboard && <Navbar />}
 
       {/* Dashboard Header with Avatar and Profile Information */}
-      {isDashboard && (
+      {isDashboard && user && (
         <div className="flex justify-end items-center p-2">
           <SignedIn>
             <div className="flex items-center">
