@@ -6,7 +6,7 @@ import {
   Route,
   RouterProvider
 } from "react-router-dom";
-import Layout from "../Layout.jsx";
+import Layout from "./components/Layout.jsx";
 import IntroSection from "./components/IntroSection.jsx";
 import FeatureSection from "./components/FeatureSection.jsx";
 import WorkFlow from "./components/WorkFlow.jsx";

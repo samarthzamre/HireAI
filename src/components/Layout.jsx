@@ -1,7 +1,7 @@
-import Footer from './src/components/Footer';
-import Navbar from './src/components/Navbar';
+import Footer from './Footer';
+import Navbar from './Navbar';
 import { Outlet, useLocation, Navigate } from 'react-router-dom';
-import ScrollToTop from './src/components/ScrollTop';
+import ScrollToTop from './ScrollTop';
 import { SignedIn, UserButton, useUser, useClerk } from '@clerk/clerk-react';
 import { useEffect } from 'react';
 
